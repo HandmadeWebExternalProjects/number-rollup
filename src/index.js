@@ -2,65 +2,83 @@ import getTargets from "./get-targets";
 import draw from "./draw";
 
 export default (userOptions) => {
-	const targets = getTargets(userOptions);
-	targets.forEach((target) => {
-		runAnimation(target);
-	});
+    const targets = getTargets(userOptions);
+    const observerConfig = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0
+    };
+
+    let observer = new IntersectionObserver(observerFn, observerConfig);
+
+    targets.forEach((target) => {
+        observer.observe(target);
+    });
 };
 
+const observerFn = (entries, observer) => {
+    console.log({ entries })
+    entries.forEach(entry => {
+        console.log({ entry })
+        if (entry.isIntersecting) {
+            runAnimation(entry);
+        }
+    })
+}
+
 const runAnimation = (target) => {
-	markTargetAsActive(target.domElement, true);
-	let currentNumber = target.startNumber;
-	let lastIntegerWritten = 0;
-	let lastRunTime = performance.now();
+    markTargetAsActive(target.domElement, true);
+    let currentNumber = target.startNumber;
+    let lastIntegerWritten = 0;
+    let lastRunTime = performance.now();
 
-	const run = () => {
-		const millisecondsElapsed = performance.now() - lastRunTime;
+    const run = () => {
+        const millisecondsElapsed = performance.now() - lastRunTime;
 
-		if (millisecondsElapsed > 0) {
-			currentNumber = getNewNumber(target.incrementPerMillisecond, millisecondsElapsed, currentNumber);
-			const currentNumberRounded = Math.floor(currentNumber);
+        if (millisecondsElapsed > 0) {
+            currentNumber = getNewNumber(target.incrementPerMillisecond, millisecondsElapsed, currentNumber);
+            const currentNumberRounded = Math.floor(currentNumber);
 
-			if (currentNumberRounded != lastIntegerWritten) {
-				draw(target, currentNumberRounded);
-				lastIntegerWritten = currentNumberRounded;
-			}
-		}
+            if (currentNumberRounded != lastIntegerWritten) {
+                draw(target, currentNumberRounded);
+                lastIntegerWritten = currentNumberRounded;
+            }
+        }
 
-		if (shouldAnimationContinue(currentNumber, target.direction, target.endNumber)) {
-			lastRunTime = performance.now();
-			requestAnimationFrame(run);
-		} else {
-			markTargetAsActive(target.domElement, false);
-		}
-	};
+        if (shouldAnimationContinue(currentNumber, target.direction, target.endNumber)) {
+            lastRunTime = performance.now();
+            requestAnimationFrame(run);
+        } else {
+            markTargetAsActive(target.domElement, false);
+        }
+    };
 
-	run();
+    run();
 };
 
 const markTargetAsActive = (domElement, isActive) => {
-	const isActiveClass = "number-rollup-is-active";
+    const isActiveClass = "number-rollup-is-active";
 
-	if (isActive) {
-		domElement.classList.add(isActiveClass);
-	} else {
-		domElement.classList.remove(isActiveClass);
-	}
+    if (isActive) {
+        domElement.classList.add(isActiveClass);
+    } else {
+        domElement.classList.remove(isActiveClass);
+    }
 };
 
 const getNewNumber = (incrementPerMillisecond, millisecondsElapsed, existingNumber) => {
-	const numberToIncrement = incrementPerMillisecond * millisecondsElapsed;
-	const newNumber = existingNumber + numberToIncrement;
+    const numberToIncrement = incrementPerMillisecond * millisecondsElapsed;
+    const newNumber = existingNumber + numberToIncrement;
 
-	return newNumber;
+    return newNumber;
 };
 
 const shouldAnimationContinue = (currentNumber, direction, endNumber) => {
-	if (direction === "ascending") {
-		return currentNumber < endNumber;
-	} else {
-		return currentNumber > endNumber;
-	}
+    if (direction === "ascending") {
+        return currentNumber < endNumber;
+    } else {
+        return currentNumber > endNumber;
+    }
 };
 
 /**
