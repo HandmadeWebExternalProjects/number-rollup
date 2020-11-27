@@ -1,30 +1,34 @@
 import getTargets from "./get-targets";
 import draw from "./draw";
 
-export default (userOptions) => {
-    const targets = getTargets(userOptions);
-    const observerConfig = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1.0
-    };
-
-    let observer = new IntersectionObserver(observerFn, observerConfig);
-
-    targets.forEach((target) => {
-        observer.observe(target);
-    });
+const observerConfig = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
 };
 
-const observerFn = (entries, observer) => {
-    console.log({ entries })
-    entries.forEach(entry => {
-        console.log({ entry })
-        if (entry.isIntersecting) {
-            runAnimation(entry);
-        }
-    })
-}
+let targets,
+    observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                let originalDomEl = entry.target,
+                    target = targets.find(el => el.domElement === originalDomEl);
+
+                runAnimation(target);
+
+                observer.unobserve(originalDomEl);
+            }
+        })
+    }, observerConfig);
+
+
+export default (userOptions) => {
+    targets = getTargets(userOptions);
+
+    targets.forEach((target) => {
+        observer.observe(target.domElement);
+    });
+};
 
 const runAnimation = (target) => {
     markTargetAsActive(target.domElement, true);
