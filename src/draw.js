@@ -1,6 +1,14 @@
 export default (target, newNumberRounded) => {
   const numberToDraw = getNumberToDraw(newNumberRounded, target);
-  target.domElement.innerHTML = `${target.prefix || ''}${numberToDraw}${target.suffix || ''}`;
+  let domEl = target.domElement;
+
+  // Actual draw happens on element user added to options *unless* there is a nested
+  // .counter-element, then it will draw inside that.
+  if (target.find(".counter-element")) {
+    domEl = target.find(".counter-element");
+  }
+
+  domEl.innerHTML = `${target.prefix || ''}${numberToDraw}${target.suffix || ''}`;
 };
 
 const getNumberToDraw = (newNumberRounded, target) => {
