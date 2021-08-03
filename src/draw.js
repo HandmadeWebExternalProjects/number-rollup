@@ -4,8 +4,8 @@ export default (target, newNumberRounded) => {
 
   // Actual draw happens on element user added to options *unless* there is a nested
   // .counter-element, then it will draw inside that.
-  if (target.find(".counter-element")) {
-    domEl = target.find(".counter-element");
+  if (domEl.querySelector(".counter-element")) {
+    domEl = domEl.querySelector(".counter-element");
   }
 
   domEl.innerHTML = `${target.prefix || ''}${numberToDraw}${target.suffix || ''}`;
