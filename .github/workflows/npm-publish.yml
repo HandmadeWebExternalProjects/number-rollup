@@ -19,6 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: npm ci
-      - run: npm publish
+      - run: npm run build
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
