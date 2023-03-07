@@ -1,6 +1,6 @@
 {
   "name": "@HandmadeWebExternalProjects/number-rollup",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Fork of marknorrapscm's number rollup package to enable intersection observer",
   "author": "marknorrapscm",
   "browser": "dist/index.js",
