@@ -1,5 +1,5 @@
 {
-  "name": "@handmadeweb/number-rollup",
+  "name": "@HandmadeWebExternalProjects/number-rollup",
   "version": "1.2.4",
   "description": "Fork of marknorrapscm's number rollup package to enable intersection observer",
   "author": "marknorrapscm",
@@ -12,10 +12,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/handmadeweb/number-rollup.git"
+    "url": "https://github.com/HandmadeWebExternalProjects/number-rollup.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/handmadeweb"
+    "registry": "https://npm.pkg.github.com/HandmadeWebExternalProjects"
   },
   "scripts": {
     "dev": "webpack-dev-server --open --config=config/webpack.dev.js",
