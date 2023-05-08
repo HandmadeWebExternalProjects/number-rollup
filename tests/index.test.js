@@ -1,5 +1,5 @@
 import "./__mocks__/intersectionObserverMock";
-import numberRollup from "./index";
+import numberRollup from "../src/js/main";
 
 test("Basic proof of validity", () => {
   expect(numberRollup).toBeTruthy();
